@@ -1,0 +1,109 @@
+# ============================================================
+# SEO & GEO WORKSHOP — .htaccess additions
+#
+# INSTRUCTIONS:
+# 1. Add these blocks AFTER the WordPress permalink rules
+#    (after # END WordPress)
+# 2. All rules are commented out by default
+# 3. NEVER edit inside # BEGIN WordPress / # END WordPress
+# ============================================================
+
+
+# ============================================================
+# FORCE HTTPS
+# Show: navigate to http://... and see it redirect to https://
+# ============================================================
+# <IfModule mod_rewrite.c>
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>
+
+
+# ============================================================
+# GZIP COMPRESSION
+# Show: test at giftofspeed.com/gzip-test or check Network
+#       tab — Transfer size should be smaller than Size
+# ============================================================
+# <IfModule mod_deflate.c>
+# AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+# AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+# AddOutputFilterByType DEFLATE application/json application/ld+json
+# AddOutputFilterByType DEFLATE application/xml application/rss+xml
+# AddOutputFilterByType DEFLATE image/svg+xml
+# AddOutputFilterByType DEFLATE application/font-woff application/font-woff2
+# </IfModule>
+
+
+# ============================================================
+# BROWSER CACHE — Tell browsers how long to keep each file type
+# Show: check response headers in DevTools Network tab
+# ============================================================
+# <IfModule mod_expires.c>
+# ExpiresActive On
+# ExpiresDefault "access plus 1 month"
+# ExpiresByType text/html "access plus 1 hour"
+# ExpiresByType text/css "access plus 1 year"
+# ExpiresByType text/javascript "access plus 1 year"
+# ExpiresByType application/javascript "access plus 1 year"
+# ExpiresByType image/jpeg "access plus 1 year"
+# ExpiresByType image/png "access plus 1 year"
+# ExpiresByType image/webp "access plus 1 year"
+# ExpiresByType image/avif "access plus 1 year"
+# ExpiresByType image/svg+xml "access plus 1 year"
+# ExpiresByType application/font-woff "access plus 1 year"
+# ExpiresByType application/font-woff2 "access plus 1 year"
+# ExpiresByType image/x-icon "access plus 1 year"
+# </IfModule>
+
+
+# ============================================================
+# PROTECT WP-CONFIG.PHP — Block direct access
+# Show: navigate to /wp-config.php — should return 403
+# ============================================================
+# <Files wp-config.php>
+# order allow,deny
+# deny from all
+# </Files>
+
+
+# ============================================================
+# DISABLE DIRECTORY LISTING — Prevent browsing folder contents
+# Show: navigate to /wp-content/uploads/ — should return 403
+# ============================================================
+# Options -Indexes
+
+
+# ============================================================
+# BLOCK XMLRPC.PHP — Vector for brute force and DDoS attacks
+# Only block if you don't use WordPress mobile app or Jetpack
+# Show: navigate to /xmlrpc.php before and after
+# ============================================================
+# <Files xmlrpc.php>
+# order allow,deny
+# deny from all
+# </Files>
+
+
+# ============================================================
+# BLOCK AUTHOR SCANNING — Prevent user enumeration
+# Show: navigate to /?author=1 — should return 403
+# ============================================================
+# <IfModule mod_rewrite.c>
+# RewriteEngine On
+# RewriteCond %{QUERY_STRING} ^author=\d+ [NC]
+# RewriteRule .* - [F,L]
+# </IfModule>
+
+
+# ============================================================
+# SECURITY HEADERS — Basic protection
+# Show: check response headers in DevTools Network tab
+# ============================================================
+# <IfModule mod_headers.c>
+# Header set X-Content-Type-Options "nosniff"
+# Header set X-Frame-Options "SAMEORIGIN"
+# Header set Referrer-Policy "strict-origin-when-cross-origin"
+# Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+# Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+# </IfModule>
