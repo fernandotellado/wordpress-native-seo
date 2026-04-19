@@ -1,98 +1,186 @@
-# WordPress native SEO & GEO snippets
+# WordPress native SEO and GEO — no plugins required
 
-A collection of PHP snippets to handle SEO and GEO in WordPress without any SEO plugin. Each snippet uses native WordPress filters and actions — no third-party dependencies.
+A complete collection of code snippets, constants, and server rules to handle SEO and GEO (Generative Engine Optimization) in WordPress without relying on SEO plugins.
 
-Based on the workshop ["Do you really need an SEO/GEO plugin for WordPress?"](https://europe.wordcamp.org/2026/session/do-you-really-need-an-seo-geo-plugin-for-wordpress/) at WordCamp Europe 2026 in Kraków.
+Everything here uses native WordPress filters, actions, `wp-config.php` constants, and `.htaccess` rules. No third-party dependencies.
 
-## Two ways to use these snippets
+Based on the workshop ["Do you really need an SEO/GEO plugin for WordPress?"](https://europe.wordcamp.org/2026/session/do-you-really-need-an-seo-geo-plugin-for-wordpress/) by [Fernando Tellado](https://ayudawp.com) at WordCamp Europe 2026 in Kraków.
 
-### Option 1: Individual snippets
+---
 
-Pick only what you need. Each file is self-contained and can be added to your theme's `functions.php` or placed as a standalone mu-plugin in `wp-content/mu-plugins/`.
+## Repository files
+
+### All-in-one mu-plugin
+
+| File | Description |
+|---|---|
+| [`ayudawp-seo-geo-tweaks.php`](ayudawp-seo-geo-tweaks.php) | All 14 PHP optimizations in a single file, active and ready for production. Drop it in `wp-content/mu-plugins/` and it works. Comment out any section you don't need. |
+
+### Individual PHP snippets
+
+Pick only what you need. Each file is self-contained and can be used as a standalone mu-plugin or added to your child theme's `functions.php`.
 
 | File | What it does |
 |---|---|
-| `auto-meta-description.php` | Generates `<meta name="description">` from native WordPress fields: tagline (homepage), excerpt (posts/pages), term description (archives), bio (authors) |
-| `clean-head.php` | Removes generator version, WLW manifest, RSD, shortlinks, REST API link, comment feeds, prev/next links from `<head>` |
-| `disable-emojis.php` | Removes the emoji detection script and styles loaded on every page |
-| `remove-query-strings.php` | Strips `?ver=` from CSS and JS URLs for better CDN caching |
-| `disable-embeds.php` | Removes oEmbed REST route, discovery links, and host JavaScript |
-| `restrict-rest-api.php` | Limits REST API access to authenticated users only |
-| `customize-sitemap.php` | Removes tags, author archives (and optionally pages) from the native XML sitemap |
-| `block-ai-training-bots.php` | Adds rules to the virtual robots.txt to block AI training crawlers (GPTBot, ClaudeBot, Google-Extended, CCBot, Bytespider) |
-| `handle-low-value-archives.php` | Redirects author and date archives to homepage, adds noindex to search results and thin taxonomy archives |
-| `small-seo-tweaks.php` | Enables excerpts on pages, disables self-pingbacks, sets a generic login error message |
-| `open-graph-tags.php` | Generates Open Graph and Twitter Card meta tags from title, excerpt, and featured image |
+| [`auto-meta-description.php`](auto-meta-description.php) | Generates `<meta name="description">` from 4 native WordPress fields: tagline (homepage), excerpt (posts/pages), term description (archives), bio (authors) |
+| [`clean-head.php`](clean-head.php) | Removes generator version, WLW manifest, RSD, shortlinks, REST API link, comment feeds, and prev/next links from `<head>` |
+| [`disable-emojis.php`](disable-emojis.php) | Removes the emoji detection script and styles loaded on every page |
+| [`disable-embeds.php`](disable-embeds.php) | Removes oEmbed REST route, discovery links, and host JavaScript |
+| [`remove-query-strings.php`](remove-query-strings.php) | Strips `?ver=` from CSS and JS URLs for better CDN and proxy caching |
+| [`restrict-rest-api.php`](restrict-rest-api.php) | Limits REST API access to authenticated users only — prevents public exposure of usernames and site data |
+| [`customize-sitemap.php`](customize-sitemap.php) | Removes tags and author archives from the native WordPress XML sitemap |
+| [`block-ai-training-bots.php`](block-ai-training-bots.php) | Adds rules to the virtual `robots.txt` to block AI training crawlers (GPTBot, ClaudeBot, Google-Extended, CCBot, Bytespider) while keeping search bots allowed |
+| [`handle-low-value-archives.php`](handle-low-value-archives.php) | Redirects author and date archives to homepage (301), adds `noindex` to search results and thin taxonomy archives |
+| [`small-seo-tweaks.php`](small-seo-tweaks.php) | Enables excerpts on pages, disables self-pingbacks, sets a generic login error message |
+| [`open-graph-tags.php`](open-graph-tags.php) | Generates Open Graph (`og:title`, `og:description`, `og:image`, `og:url`) and Twitter Card tags from standard WordPress fields |
 
-### Option 2: All-in-one mu-plugin
+### Configuration reference files
 
-Drop `ayudawp-seo-geo-tweaks.php` into `wp-content/mu-plugins/` and you get everything in a single file. Comment out any section you don't need.
+These files contain constants and rules you copy into your existing WordPress configuration files. Everything is commented out — uncomment what you need.
 
-This file includes all 14 optimizations organized in clear sections:
+| File | What it is | Where to use it |
+|---|---|---|
+| [`wp-config-additions.php`](wp-config-additions.php) | 10 constants: revisions, autosave, trash, file editor, SSL, WP-Cron, memory, script compression, debug | Copy contents into your `wp-config.php` before the line `/* That's all, stop editing! */` |
+| [`htaccess-additions.txt`](htaccess-additions.txt) | 8 rule blocks: force HTTPS, GZIP compression, browser cache, protect wp-config.php, disable directory listing, block xmlrpc.php, block author scanning, security headers | Copy contents into your `.htaccess` after `# END WordPress`. Requires Apache with `mod_rewrite`, `mod_deflate`, `mod_expires`, `mod_headers`. |
 
-1. Head cleanup
-2. Disable emojis
-3. Remove query strings
-4. Disable oEmbed/Embeds
-5. Restrict REST API
-6. Sitemap customization
-7. Block AI training bots (robots.txt)
-8. Auto meta description (all page types)
-9. Open Graph and Twitter Card tags
-10. Enable excerpts on pages
-11. Disable self-pingbacks
-12. Redirect low-value archives
-13. Noindex rules (search, thin archives)
-14. Generic login error message
+---
 
 ## Installation
 
-### As mu-plugin (recommended)
+### Option 1: All-in-one mu-plugin (recommended)
 
 1. Create the folder `wp-content/mu-plugins/` if it doesn't exist
-2. Copy `ayudawp-seo-geo-tweaks.php` (or individual snippet files) into it
-3. Done — mu-plugins load automatically, no activation needed
+2. Download [`ayudawp-seo-geo-tweaks.php`](ayudawp-seo-geo-tweaks.php) and place it there
+3. Done — mu-plugins load automatically, no activation required
+4. Open the file and comment out any section you don't need
 
-### In functions.php
+### Option 2: Individual snippets
 
-Copy the code from any snippet file into your **child theme's** `functions.php`. Don't edit the parent theme directly — updates will overwrite your changes.
+1. Download only the snippet files you need
+2. Place them in `wp-content/mu-plugins/` (each file works independently)
+3. Or copy the code into your **child theme's** `functions.php`
+
+### wp-config.php constants
+
+1. Open [`wp-config-additions.php`](wp-config-additions.php) and copy the constants you want
+2. Paste them into your `wp-config.php` before the line that says `/* That's all, stop editing! */`
+3. Uncomment each constant you want to activate
+
+### .htaccess rules
+
+1. Open [`htaccess-additions.txt`](htaccess-additions.txt) and copy the rule blocks you want
+2. Paste them into your `.htaccess` **after** the `# END WordPress` block
+3. Uncomment the rules you want to activate
+4. These require Apache — they won't work on Nginx or on some local development environments
+
+---
+
+## The meta description snippet explained
+
+The [`auto-meta-description.php`](auto-meta-description.php) snippet deserves special attention. It replaces the core function of most SEO plugins — meta descriptions — with a single WordPress hook:
+
+| Page type | Source field | Where to edit it |
+|---|---|---|
+| Homepage | Tagline | Settings → General → Tagline |
+| Posts and pages | Excerpt (or trimmed content) | Post sidebar → Excerpt |
+| Category / Tag archives | Term description | Categories → Edit → Description |
+| Author archives | Biographical info | Users → Profile → Biographical Info |
+
+If a field is empty, no meta tag is generated for that page. The only requirement is filling in the fields that WordPress already provides.
+
+---
+
+## What these snippets cover
+
+### Performance
+- Remove emoji scripts and styles from every page
+- Strip query strings from static resources for better caching
+- Disable oEmbed scripts and REST routes
+- Clean unnecessary tags from `<head>`
+- Limit post revisions, autosave frequency, trash retention (wp-config.php)
+- GZIP compression and browser cache rules (.htaccess)
+
+### SEO
+- Auto meta descriptions from native WordPress fields
+- Open Graph and Twitter Card tags from title, excerpt, and featured image
+- Customize the native XML sitemap (exclude tags, authors, pages)
+- Redirect low-value archives (author, date) to homepage
+- Add `noindex` to search results and thin taxonomy archives
+- Clean permalink structure
+
+### GEO (Generative Engine Optimization)
+- Block AI training bots while keeping search and citation bots allowed
+- Configure the virtual `robots.txt` for AI crawler management
+
+### Security
+- Restrict REST API to authenticated users
+- Disable the file editor in admin
+- Block `xmlrpc.php` and author scanning (.htaccess)
+- Generic login error messages
+- Security headers (.htaccess)
+- Protect `wp-config.php` from direct access (.htaccess)
+
+---
+
+## Going further: plugins for the gaps
+
+These snippets cover the code side, but there are things that benefit from a proper plugin with UI, ongoing updates, and deeper integration. All free:
+
+### SEO
+| Plugin | What it does |
+|---|---|
+| [NoIndexer](https://wordpress.org/plugins/noindexer/) | Selective `noindex` per post type, taxonomy, individual post, special pages, and feeds — with editor integration, Quick Edit, bulk actions, and automatic sitemap exclusion |
+| [Native Sitemap Customizer](https://wordpress.org/plugins/native-sitemap-customizer/) | Visual control over the native WordPress XML sitemap |
+| [Open Graph Tags](https://github.com/fernandotellado/open-graph-tags-wordpress) | Full Open Graph and Twitter Card implementation with edge cases |
+| [SEO Read More Buttons](https://wordpress.org/plugins/seo-read-more-buttons-ayudawp/) | Control "Read More" button text and style in archives |
+
+### Performance
+| Plugin | What it does |
+|---|---|
+| [WPO Tweaks](https://wordpress.org/plugins/wpo-tweaks/) | All performance optimizations in this repo + critical CSS, deferred CSS, preconnect, lazy loading, database cleanup — zero configuration |
+| [Easy Actions Scheduler Cleaner](https://wordpress.org/plugins/easy-actions-scheduler-cleaner-ayudawp/) | Clean up orphan scheduled tasks left by uninstalled plugins |
+
+### GEO (Generative Engine Optimization)
+| Plugin | What it does |
+|---|---|
+| [VigIA](https://wordpress.org/plugins/vigia/) | JSON-LD structured data, `llms.txt` generation, Markdown for AI agents, AI crawler analytics and blocking |
+| [AI Content Signals](https://wordpress.org/plugins/ai-content-signals/) | Cloudflare's AI content signals standard, physical `robots.txt` with visual AI bot control |
+| [AI Share & Summarize](https://wordpress.org/plugins/ai-share-summarize/) | Share buttons for AI platforms (ChatGPT, Claude, Perplexity...) that include your URL as source |
+
+### WordPress 7 native AI
+| Plugin | What it does |
+|---|---|
+| [AI Experiments](https://wordpress.org/plugins/ai/) | Official WordPress plugin: AI-powered alt text, excerpts, titles, content review with SEO suggestions |
+| [AI Provider for OpenAI](https://wordpress.org/plugins/ai-provider-for-openai/) | OpenAI connector for WordPress AI infrastructure |
+| [AI Provider for Anthropic](https://wordpress.org/plugins/ai-provider-for-anthropic/) | Anthropic/Claude connector for WordPress AI infrastructure |
+
+### Security
+| Plugin | What it does |
+|---|---|
+| [Vigilante](https://wordpress.org/plugins/vigilante/) | Basic security hardening |
+
+---
 
 ## Requirements
 
 - WordPress 5.5 or higher (for native sitemap support)
 - PHP 7.4 or higher
+- Apache with `mod_rewrite`, `mod_deflate`, `mod_expires`, `mod_headers` (for `.htaccess` rules only)
 
-## What about wp-config.php?
+---
 
-These snippets handle the PHP/filter side. For `wp-config.php` constants (revisions, autosave, trash, memory, cron, SSL, debug) and `.htaccess` rules (GZIP, caching, security headers), check the [complete reference guide](https://github.com/fernandotellado/wordpress-native-seo-geo).
+## Further reading
 
-## The meta description snippet explained
+- [How to rank in Google AI Overviews](https://ayudawp.com/ai-overviews-google/)
+- [SEO and AI: everything you need to know](https://ayudawp.com/seo-ia/)
+- [Google's "Great Decoupling"](https://ayudawp.com/gran-desacoplamiento-google/)
+- [llms.txt and llms-full.txt explained](https://ayudawp.com/llms-txt-llms-full-txt/)
+- [Markdown for AI agents](https://ayudawp.com/markdown-agentes-ia/)
+- [JSON-LD in WordPress](https://ayudawp.com/json-ld/)
+- [Understanding TTFB](https://ayudawp.com/ttfb/)
+- [The wp-config.php file: complete guide](https://ayudawp.com/wpconfig/)
 
-The `auto-meta-description.php` snippet deserves special attention. It replaces the core function of an SEO plugin — meta descriptions — with a single hook and zero configuration:
-
-| Page type | Source field |
-|---|---|
-| Homepage | Tagline from Settings → General |
-| Posts and pages | Manual excerpt, or trimmed content if no excerpt exists |
-| Category/Tag/Custom taxonomy archives | Term description field |
-| Author archives | Biographical info from user profile |
-
-The only requirement: fill in the fields that WordPress already provides. If your tagline says "Just another WordPress site", that's your meta description. If your category has no description, it won't generate one. The snippet uses what you give it.
-
-## Going further: plugins for the gaps
-
-These snippets cover a lot, but there are things WordPress can't do natively. For those gaps, these free plugins complement the snippets:
-
-| Gap | Plugin |
-|---|---|
-| Selective noindex per post/taxonomy/archive | [NoIndexer](https://wordpress.org/plugins/noindexer/) |
-| Sitemap control without code | [Native Sitemap Customizer](https://wordpress.org/plugins/native-sitemap-customizer/) |
-| Full Open Graph with edge cases | [Open Graph Tags](https://github.com/fernandotellado/open-graph-tags-wordpress) |
-| Performance cleanup (zero config) | [WPO Tweaks](https://wordpress.org/plugins/wpo-tweaks/) |
-| Cron/scheduled actions cleanup | [Easy Actions Scheduler Cleaner](https://wordpress.org/plugins/easy-actions-scheduler-cleaner-ayudawp/) |
-| JSON-LD, llms.txt, Markdown for AI, bot analytics | [VigIA](https://wordpress.org/plugins/vigia/) |
-| AI content signals, physical robots.txt | [AI Content Signals](https://wordpress.org/plugins/ai-content-signals/) |
-| Share content with AI platforms | [AI Share & Summarize](https://wordpress.org/plugins/ai-share-summarize/) |
+---
 
 ## License
 
@@ -101,3 +189,5 @@ GPL-2.0-or-later. Use, modify, and share freely.
 ## Author
 
 [Fernando Tellado](https://ayudawp.com) — WordPress specialist since 2005.
+
+[AyudaWP.com](https://ayudawp.com) · [@fernandot](https://x.com/fernandot) · [YouTube](https://www.youtube.com/AyudaWordPressES)
