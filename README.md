@@ -22,7 +22,7 @@ Pick only what you need. Each file is self-contained and can be used as a standa
 
 | File | What it does |
 |---|---|
-| [`auto-meta-description.php`](auto-meta-description.php) | Generates `<meta name="description">` from 4 native WordPress fields: tagline (homepage), excerpt (posts/pages), term description (archives), bio (authors) |
+| [`auto-meta-description.php`](auto-meta-description.php) | Generates `<meta name="description">` from 4 native WordPress fields: tagline (homepage), excerpt (posts/pages), term description (archives), bio (authors). For the UI version with per-post overrides and JSON-LD schema, see [Native SEO Meta Tags](https://wordpress.org/plugins/native-seo-meta-tags/) |
 | [`clean-head.php`](clean-head.php) | Removes generator version, WLW manifest, RSD, shortlinks, REST API link, comment feeds, and prev/next links from `<head>` |
 | [`disable-emojis.php`](disable-emojis.php) | Removes the emoji detection script and styles loaded on every page |
 | [`disable-embeds.php`](disable-embeds.php) | Removes oEmbed REST route, discovery links, and host JavaScript |
@@ -32,7 +32,7 @@ Pick only what you need. Each file is self-contained and can be used as a standa
 | [`block-ai-training-bots.php`](block-ai-training-bots.php) | Adds rules to the virtual `robots.txt` to block AI training crawlers (GPTBot, ClaudeBot, Google-Extended, CCBot, Bytespider) while keeping search bots allowed |
 | [`handle-low-value-archives.php`](handle-low-value-archives.php) | Redirects author and date archives to homepage (301), adds `noindex` to search results and thin taxonomy archives |
 | [`small-seo-tweaks.php`](small-seo-tweaks.php) | Enables excerpts on pages, disables self-pingbacks, sets a generic login error message |
-| [`open-graph-tags.php`](open-graph-tags.php) | Generates Open Graph (`og:title`, `og:description`, `og:image`, `og:url`) and Twitter Card tags from standard WordPress fields |
+| [`open-graph-tags.php`](open-graph-tags.php) | Generates Open Graph (`og:title`, `og:description`, `og:image`, `og:url`) and Twitter Card tags from standard WordPress fields. For the full version with smart image detection and per-post overrides, see [Native SEO Meta Tags](https://wordpress.org/plugins/native-seo-meta-tags/) |
 
 ### Configuration reference files
 
@@ -126,19 +126,23 @@ If a field is empty, no meta tag is generated for that page. The only requiremen
 
 These snippets cover the code side, but there are things that benefit from a proper plugin with UI, ongoing updates, and deeper integration. All free:
 
-### SEO
+### The Native SEO Suite
+
+A small set of focused plugins that together replace the core functionality of a traditional SEO plugin. Each one does one job well, they share the same philosophy, and they're built to coexist with major SEO plugins (Yoast, Rank Math, AIOSEO, SEOPress, The SEO Framework) — auto-detecting them and stepping aside to avoid duplicate tags.
+
 | Plugin | What it does |
 |---|---|
-| [NoIndexer](https://wordpress.org/plugins/noindexer/) | Selective `noindex` per post type, taxonomy, individual post, special pages, and feeds — with editor integration, Quick Edit, bulk actions, and automatic sitemap exclusion |
-| [Native Sitemap Customizer](https://wordpress.org/plugins/native-sitemap-customizer/) | Visual control over the native WordPress XML sitemap |
-| [Open Graph Tags](https://github.com/fernandotellado/open-graph-tags-wordpress) | Full Open Graph and Twitter Card implementation with edge cases |
-| [SEO Read More Buttons](https://wordpress.org/plugins/seo-read-more-buttons-ayudawp/) | Control "Read More" button text and style in archives |
+| [Native SEO Meta Tags](https://wordpress.org/plugins/native-seo-meta-tags/) | Meta title, meta description, Open Graph, Twitter Card, and JSON-LD schema (Article, BreadcrumbList, Person for E-E-A-T) from native WordPress fields, with per-post overrides in the block editor |
+| [Native SEO NoIndexer](https://wordpress.org/plugins/noindexer/) | Selective `noindex` per post type, taxonomy, individual post, special pages, and feeds — with editor integration, Quick Edit, bulk actions, and automatic sitemap exclusion |
+| [Native SEO Sitemap Customizer](https://wordpress.org/plugins/native-sitemap-customizer/) | Visual control over the native WordPress XML sitemap |
 
-### Performance
+### Other companions
+
 | Plugin | What it does |
 |---|---|
 | [WPO Tweaks](https://wordpress.org/plugins/wpo-tweaks/) | All performance optimizations in this repo + critical CSS, deferred CSS, preconnect, lazy loading, database cleanup — zero configuration |
 | [Easy Actions Scheduler Cleaner](https://wordpress.org/plugins/easy-actions-scheduler-cleaner-ayudawp/) | Clean up orphan scheduled tasks left by uninstalled plugins |
+| [SEO Read More Buttons](https://wordpress.org/plugins/seo-read-more-buttons-ayudawp/) | Control "Read More" button text and style in archives |
 
 ### GEO (Generative Engine Optimization)
 | Plugin | What it does |
